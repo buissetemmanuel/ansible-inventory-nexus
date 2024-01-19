@@ -1,0 +1,7 @@
+server02 ansible_host=server02.local.ch
+
+[all:vars]
+ansible_user=admin
+
+[nexus]
+server02
