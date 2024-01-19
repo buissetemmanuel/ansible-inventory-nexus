@@ -1,0 +1,42 @@
+---
+
+users_groups:
+  - name: nexusug
+  - name: nexusugs
+  - name: nexusugl
+  - name: nexusugal
+users_users:
+  - name: nexusuo
+    group: nexusug
+    create_home: true
+  - name: nexusuos
+    group: nexusugs
+    create_home: true
+    groups: nexusugl, wheel
+  - name: nexusual
+    group: nexusugal
+    groups: nexusugl
+
+container_user_owner: nexusuo
+container_user_group: nexusug
+container_user_group_logs: nexusugl
+container_user_owner_service: nexusuos
+container_user_group_service: nexusugs
+
+container_pod_name: nexus_pod
+
+container_pod_containers:
+  - name: nexus
+    description: "Nexus server container"
+    image_name: docker.io/sonatype/nexus3
+    image_tag: 3.64.0
+    image_pull_policy: IfNotPresent
+    resources:
+      limits:
+        cpu: "2"
+      requests:
+        cpu: "1"
+    ports:
+      - containerPort: 8081
+        hostPort: 8081
+        protocol: TCP
