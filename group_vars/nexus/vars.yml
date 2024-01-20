@@ -33,10 +33,31 @@ container_pod_containers:
     image_pull_policy: IfNotPresent
     resources:
       limits:
-        cpu: "2"
+        memory: "4Gi"
+        cpu: "1000m"
       requests:
-        cpu: "1"
+        memory: "2Gi"
+        cpu: "500m"
+    securityContext:
+      runAsUser: 0
     ports:
       - containerPort: 8081
         hostPort: 8081
         protocol: TCP
+    volumeMounts:
+      - mountPath: /nexus-data:rw,z
+        name: nexus-data
+
+nexus_pod_data_dir: "{{ container_pod_home_dir }}/nexus-data"
+
+container_directories:
+  - path: "{{ nexus_pod_data_dir }}"
+    owner: "{{ container_user_owner_service }}"
+    group: "{{ container_user_group_service }}"
+    mode: "{{ container_directories_mode }}"
+
+container_pod_volumes:
+  - name: nexus-data
+    hostPath:
+      path: "{{ nexus_pod_data_dir }}"
+      type: DirectoryOrCreate
